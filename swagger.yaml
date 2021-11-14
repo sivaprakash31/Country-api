@@ -1,0 +1,271 @@
+openapi: 3.0.0
+
+info: 
+  title: Country API 
+  description: Country API helps in getting All Countries - Country code, Dial Code, Flag, Full Name.
+  version: 1.0.0
+  contact:
+    email: harikarthyk1407@gmail.com
+    url: https://harikarthyk.xyz
+
+servers:
+  - url: http://localhost:4000/api/{version}
+    description: Localhost version of our app
+    variables:
+      version:
+        enum:
+          - v1
+          - v2
+        default: v1
+
+paths:
+  /testing:
+    get:
+      summary: testing route
+      responses: 
+        '200':
+          description: return text that server is up and running successfully
+  
+  /country/all:
+    get: 
+      summary: get all countries details
+      responses: 
+        '200': 
+          description: return an json
+          content: 
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  success:
+                    type: boolean
+                    example: true
+                  countries:
+                    type: array
+                    items: 
+                      type: object
+                      properties: 
+                        name: 
+                          type: string
+                        dialCode: 
+                          type: string
+                        code: 
+                          type: string
+                        flag: 
+                          type: string
+                      example: {
+                        dialCode: "+1",
+                        flag: "🇨🇦",
+                        code: "CA",
+                        country: "Canada",
+                      }
+        '400':
+          description: Bad Request
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error: 
+                    type: string
+                    example: error
+        '500':
+          description: Internal server error
+  
+  /country/{countryCode}:
+    get: 
+      summary: get country details by countryCode
+      parameters:
+        - name: countryCode
+          in: path
+          required: true
+          schema: 
+            type: string
+      responses: 
+        '200': 
+          description: returns an json
+          content: 
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  success:
+                    type: boolean
+                    example: true
+                  country:
+                    type: object
+                    properties: 
+                      name: 
+                        type: string
+                      dialCode: 
+                        type: string
+                      code: 
+                        type: string
+                      flag: 
+                        type: string
+                    example: {
+                      dialCode: "+1",
+                      flag: "🇨🇦",
+                      code: "CA",
+                      country: "Canada",
+                    }
+        '400':
+          description: Bad Request
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error: 
+                    type: string
+                    example: error
+        '500':
+          description: Internal server error  
+        
+  /country:
+    post:
+      summary: get countries with pagination
+      requestBody:
+        description: pass limit and page field in json format
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                page: 
+                  type: number
+                limit: 
+                  type: number
+      responses:
+        200:
+          description: Successfully Fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  countries:
+                    type: array
+                    items: 
+                      type: object
+                      properties: 
+                        name: 
+                          type: string
+                        dialCode: 
+                          type: string
+                        code: 
+                          type: string
+                        flag: 
+                          type: string
+                      example: {
+                        dialCode: "+1",
+                        flag: "🇨🇦",
+                        code: "CA",
+                        country: "Canada",
+                      }
+                    example: [{
+                        dialCode: "+1",
+                        flag: "🇨🇦",
+                        code: "CA",
+                        country: "Canada",
+                    }]
+        400:
+          description: Bad Request
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error: 
+                    type: string
+                    example: limit can't be 0
+        500: 
+          description: Internal Server Error
+
+    get:
+      summary: get countries with pagination
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          schema: 
+            type: number
+            example: 1
+        - name: page
+          in: query
+          required: true
+          schema: 
+            type: number
+            example: 1
+        
+      responses:
+        200:
+          description: Successfully Fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  countries:
+                    type: array
+                    items: 
+                      type: object
+                      properties: 
+                        name: 
+                          type: string
+                        dialCode: 
+                          type: string
+                        code: 
+                          type: string
+                        flag: 
+                          type: string
+                      example: {
+                        dialCode: "+1",
+                        flag: "🇨🇦",
+                        code: "CA",
+                        country: "Canada",
+                      }
+                    example: [{
+                        dialCode: "+1",
+                        flag: "🇨🇦",
+                        code: "CA",
+                        country: "Canada",
+                    }]
+        400:
+          description: Bad Request
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error: 
+                    type: string
+                    example: limit can't be 0
+        500: 
+          description: Internal Server Error
+
+  
+
+
+
+
+        
