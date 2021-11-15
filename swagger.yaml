@@ -400,10 +400,12 @@ paths:
 
   /key/:
     get:
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
       tags:
         - app
       summary: get API Key
-        
       responses:
         200:
           description: Successfully Fetched
