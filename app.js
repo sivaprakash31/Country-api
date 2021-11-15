@@ -11,12 +11,12 @@ const apiKeyRoutes = require('./routes/api');
 app.use(express.json());
 app.use(cookieParser());
 
-app.get('/api/v1/testing', (req, res) => {
-    res.send('Server is up and running');    
+app.get('/api', (req, res) => {
+    return res.send('Server is up and running');    
 });
 
 app.use('/api/v1/', countryRoutesV1);
-app.use('/api/user', userRoutes);
-app.use('/api/key', apiKeyRoutes);
+app.use('/api/app/user', userRoutes);
+app.use('/api/app/key', apiKeyRoutes);
 
 module.exports = app;

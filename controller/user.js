@@ -47,7 +47,7 @@ exports.register = async(req, res) => {
 
         await User.findOneAndUpdate({ email }, { $set: { token: token } });
 
-        res.clearCookie('token');
+        await res.clearCookie('token');
 
         const cookieOptions = {
             expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
@@ -62,7 +62,7 @@ exports.register = async(req, res) => {
 
     }catch(error){
         console.log(error);
-        return res.status(500).json({
+        return res.status(400).json({
             success: false,
             error: error
         });
@@ -98,7 +98,7 @@ exports.login = async(req, res) => {
 
             await User.findOneAndUpdate({ email },{$set: {token: token}});
 
-            res.clearCookie('token');
+            await res.clearCookie('token');
 
             const cookieOptions = {
                 expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
@@ -117,14 +117,12 @@ exports.login = async(req, res) => {
         }
 
 
-
-        return res.status(400).json({
+        return res.status(401).json({
             success: false,
             error: "email or password is incorrect."
         });
 
     }catch(error){
-        console.log(error);
         return res.status(400).json({
             success: false,
             error: error

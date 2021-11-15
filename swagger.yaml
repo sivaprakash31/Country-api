@@ -10,27 +10,38 @@ info:
 
 servers:
   - url: http://localhost:4000/api/{version}
-    description: Localhost version of our app
+    # description: Localhost version of our app for getting countries
     variables:
       version:
         enum:
           - v1
-          - v2
+          - app
         default: v1
+    
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
 
 paths:
-  /testing:
-    get:
-      summary: testing route
-      responses: 
-        '200':
-          description: return text that server is up and running successfully
   
   /country/all:
     get: 
+      security:
+        - bearerAuth: []
+      tags:
+        - v1
       summary: get all countries details
       responses: 
-        '200': 
+        200: 
           description: return an json
           content: 
             application/json:
@@ -59,7 +70,20 @@ paths:
                         code: "CA",
                         country: "Canada",
                       }
-        '400':
+        403:
+          description: Token Missing
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error: 
+                    type: string
+                    example: Token is missing.
+        400:
           description: Bad Request
           content: 
             application/json:
@@ -72,11 +96,15 @@ paths:
                   error: 
                     type: string
                     example: error
-        '500':
+        500:
           description: Internal server error
   
   /country/{countryCode}:
     get: 
+      security:
+        - bearerAuth: []
+      tags:
+        - v1
       summary: get country details by countryCode
       parameters:
         - name: countryCode
@@ -129,73 +157,11 @@ paths:
           description: Internal server error  
         
   /country:
-    post:
-      summary: get countries with pagination
-      requestBody:
-        description: pass limit and page field in json format
-        required: true
-        content: 
-          application/json:
-            schema:
-              type: object
-              properties:
-                page: 
-                  type: number
-                limit: 
-                  type: number
-      responses:
-        200:
-          description: Successfully Fetched
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  countries:
-                    type: array
-                    items: 
-                      type: object
-                      properties: 
-                        name: 
-                          type: string
-                        dialCode: 
-                          type: string
-                        code: 
-                          type: string
-                        flag: 
-                          type: string
-                      example: {
-                        dialCode: "+1",
-                        flag: "🇨🇦",
-                        code: "CA",
-                        country: "Canada",
-                      }
-                    example: [{
-                        dialCode: "+1",
-                        flag: "🇨🇦",
-                        code: "CA",
-                        country: "Canada",
-                    }]
-        400:
-          description: Bad Request
-          content: 
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                  error: 
-                    type: string
-                    example: limit can't be 0
-        500: 
-          description: Internal Server Error
-
     get:
+      security:
+        - bearerAuth: []
+      tags:
+        - v1
       summary: get countries with pagination
       parameters:
         - name: limit
@@ -241,12 +207,6 @@ paths:
                         code: "CA",
                         country: "Canada",
                       }
-                    example: [{
-                        dialCode: "+1",
-                        flag: "🇨🇦",
-                        code: "CA",
-                        country: "Canada",
-                    }]
         400:
           description: Bad Request
           content: 
@@ -263,9 +223,243 @@ paths:
         500: 
           description: Internal Server Error
 
-  
+  /user/login:
+    post:
+      tags:
+        - app
+      summary: Login to our App
+      requestBody:
+        description: pass login credentials i.e email and password
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: 
+                  type: string
+                  example: example@gmail.com
+                password: 
+                  type: string
+                  example: your_password
+      responses:
+        200:
+          description: Successfully Logged In
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  user: 
+                    type: object
+                    properties: 
+                      _id: 
+                        type: string
+                        example: "unique_id"
+                      name: 
+                        type: string
+                        example: John
+                      email:
+                        type: string
+                        example: example@gmail.com
+                      isActive: 
+                        type: boolean
+                        example: true
+                      createdAt:
+                        type: string
+                        example: "2021-11-14T15:15:36.895Z"
+                      updatedAt:
+                        type: string
+                        example: "2021-11-14T15:15:36.895Z"
+                      token:
+                        type: string
+                        example: "your_token"
+
+        401:
+          description: Invalid Credential passed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: email or password is incorrect.
+
+        400:
+          description: Bad Request
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error: 
+                    type: string
+                    example: All fields are required.
+
+        500: 
+          description: Internal Server Error
+
+  /user/register:
+    post:
+      tags:
+        - app
+      summary: Register new user to our app
+      requestBody:
+        description: pass credentials i.e name, email and password
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John
+                email: 
+                  type: string
+                  example: example@gmail.com
+                password: 
+                  type: string
+                  example: your_password
+      responses:
+        200:
+          description: Successfully Registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  user: 
+                    type: object
+                    properties: 
+                      _id: 
+                        type: string
+                        example: "unique_id"
+                      name: 
+                        type: string
+                        example: John
+                      email:
+                        type: string
+                        example: example@gmail.com
+                      isActive: 
+                        type: boolean
+                        example: true
+                      createdAt:
+                        type: string
+                        example: "2021-11-14T15:15:36.895Z"
+                      updatedAt:
+                        type: string
+                        example: "2021-11-14T15:15:36.895Z"
+                      token:
+                        type: string
+                        example: "your_token"
+
+        401:
+          description: Invalid Credential passed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: User already exists..
+
+        400:
+          description: Bad Request
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error: 
+                    type: string
+                    example: All fields are required.
+
+        500: 
+          description: Internal Server Error
+
+  /key/:
+    get:
+      tags:
+        - app
+      summary: get API Key
+        
+      responses:
+        200:
+          description: Successfully Fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  API:
+                    type: string
+                    example: "api_token"
+                  api: 
+                    type: object
+                    properties: 
+                      _id: 
+                        type: string
+                        example: "unique_id"
+                      user: 
+                        type: string
+                        example: "user_id"
+                      isTrail:
+                        type: boolean
+                        example: true
+                      isActive: 
+                        type: boolean
+                        example: true
+                      createdAt:
+                        type: string
+                        example: "2021-11-14T15:15:36.895Z"
+                      updatedAt:
+                        type: string
+                        example: "2021-11-14T15:15:36.895Z"
+                
+        400:
+          description: Bad Request
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error: 
+                    type: string
+                    example: Invalid Token
+        500: 
+          description: Internal Server Error
 
 
+    
+
+    
 
 
         

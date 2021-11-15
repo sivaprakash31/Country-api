@@ -3,10 +3,11 @@ const { countries } = require("../../constant/country");
 
 exports.getAllCountries = async(req, res) => {
     try{    
-        return res.status(200).json({
-            success: true,
-            countries: countries
-        });
+        if (!res.headersSent)
+            return res.status(200).json({
+                success: true,
+                countries: countries
+            });
     }catch(error){
         return res.status(400).json({
             success: false,

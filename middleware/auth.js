@@ -59,6 +59,7 @@ exports.isAuthorized = async(req, res, next) => {
         const api = await Api.findOne({ _id: token });
         if(api && api.isActive === true){
             next();
+            return;
         }
 
         if(!api){

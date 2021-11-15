@@ -12,8 +12,13 @@ exports.getApiKey = async(req, res) => {
             });
         }
 
-        const api = await Api.findOne({ user: user._id });
-        
+        const api = await Api.findOne({ user: user?._id });
+        if(api === null){
+            return res.status(400).json({
+                success: false,
+                error: "No Api Key found"
+            });
+        }
         return res.status(200).json({
             success: true,
             API: api._id,
@@ -23,7 +28,7 @@ exports.getApiKey = async(req, res) => {
     }catch(error){
         return res.status(400).json({
             success: false,
-            error: error
+            error: error?.message || error
         })
     }
 }   
