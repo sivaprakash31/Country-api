@@ -34,7 +34,6 @@ const orderSchema = new mongoose.Schema(
         },
         receipt: {
             type: String,
-        
         },
         status: {
             type: String,
@@ -43,7 +42,7 @@ const orderSchema = new mongoose.Schema(
         created_at: {
             type: String,
             require: true
-        }
+        },
     }
 );
 

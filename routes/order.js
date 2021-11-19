@@ -1,10 +1,10 @@
 const express = require('express');
 const { 
-    subscribe
+    createOrder
 } = require('../controller/order');
 const { isSignedIn } = require('../middleware/auth');
 const router = express.Router();
 
-router.post('/:userId/:apiId',isSignedIn, subscribe);
+router.post('/:userId/:apiId/',isSignedIn, createOrder);
 
 module.exports = router;

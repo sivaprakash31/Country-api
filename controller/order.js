@@ -1,10 +1,11 @@
 const Api = require("../model/api");
 const Order = require("../model/order");
 
-exports.subscribe = async(req, res) => {
+exports.createOrder = async(req, res) => {
     try{
         const { apiId } = req.params;
-        
+        const { plan } = req.query;
+
         if(!apiId){
             return res.status(400).json({
                 success: false,
@@ -12,8 +13,15 @@ exports.subscribe = async(req, res) => {
             });
         }
 
+        if(!plan){
+            return res.status(400).json({
+                success: false,
+                error: "Plan missing in queries."
+            });
+        }
+
         const order = await Order.create(req.body);
-        Api.findOneAndUpdate({ _id: apiId }, { $set: { isActive: false } });
+        Api.findOneAndUpdate({ _id: apiId }, { $set: { isActive: false, plan: plan } });
         
         return res.status(201).json({
             success: true,

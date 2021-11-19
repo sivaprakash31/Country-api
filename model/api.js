@@ -21,6 +21,11 @@ const apiSchema = new mongoose.Schema(
         currentHits: {
             type: Number,
             default: 0
+        },
+        plan:{
+            type: String,
+            default: "FREE",
+            enum: ["FREE", "PRO", "ULTRA", "MEGA"]
         }
     },
     { timestamps: true }
