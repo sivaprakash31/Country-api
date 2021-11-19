@@ -4,7 +4,11 @@ const orderSchema = new mongoose.Schema(
     {
         user: {
             type: mongoose.SchemaTypes.ObjectId,
-            ref: "user"
+            ref: "User"
+        },
+        api:{
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "Api"
         },
         orderId: {
             type: String,

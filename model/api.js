@@ -13,6 +13,14 @@ const apiSchema = new mongoose.Schema(
         isTrail:{
             type: Boolean,
             default: false
+        },
+        totalHits: {
+            type: Number,
+            default: 0
+        },
+        currentHits: {
+            type: Number,
+            default: 0
         }
     },
     { timestamps: true }

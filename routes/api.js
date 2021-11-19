@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post('/', isSignedIn, newApiKey);
 
-router.put('/:ApiKey', isSignedIn, updateApiKey);
+router.put('/:apiId', isSignedIn, updateApiKey);
 
 router.get('/', isSignedIn, getApiKey);
 

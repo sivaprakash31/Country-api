@@ -82,9 +82,9 @@ exports.updateApiKey = async(req, res) => {
             });
         }
         
-        const { ApiKey } = req.params;
+        const { apiId } = req.params;
 
-        const updatedApiKey = await Api.findOneAndUpdate({ _id: ApiKey }, { $set: req.body }, { new : true });
+        const updatedApiKey = await Api.findOneAndUpdate({ _id: apiId }, { $set: req.body }, { new : true });
         
     
         return res.status(200).json({
