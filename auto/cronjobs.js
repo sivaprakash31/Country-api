@@ -14,4 +14,4 @@ const scheduledJobForClearingHits = async () => {
         });
     }
 }
-cron.schedule('*/2 * * * *', scheduledJobForClearingHits);
+cron.schedule('*/60 * * * *', scheduledJobForClearingHits);
