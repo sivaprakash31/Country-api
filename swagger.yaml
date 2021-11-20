@@ -9,8 +9,15 @@ info:
     url: https://harikarthyk.xyz
 
 servers:
+  - url: http://all-country-api.herokuapp.com/api/{version}
+    variables:
+      version:
+        enum:
+          - v1
+          - app
+        default: v1
   - url: http://localhost:4000/api/{version}
-    # description: Localhost version of our app for getting countries
+    description: Localhost version of our app for getting countries
     variables:
       version:
         enum:
