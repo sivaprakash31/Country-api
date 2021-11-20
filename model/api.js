@@ -26,7 +26,7 @@ const apiSchema = new mongoose.Schema(
             type: String,
             default: "FREE",
             enum: ["FREE", "PRO", "ULTRA", "MEGA"]
-        }
+        },
     },
     { timestamps: true }
 );

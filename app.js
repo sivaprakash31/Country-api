@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser')
 require('./config/database');
+require('./auto/cronjobs');
 const app = express();
 
 const countryRoutesV1 = require('./routes/v1/country');

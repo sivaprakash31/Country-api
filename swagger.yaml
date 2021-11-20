@@ -113,7 +113,7 @@ paths:
           schema: 
             type: string
       responses: 
-        '200': 
+        200: 
           description: returns an json
           content: 
             application/json:
@@ -140,7 +140,7 @@ paths:
                       code: "CA",
                       country: "Canada",
                     }
-        '400':
+        400:
           description: Bad Request
           content: 
             application/json:
@@ -153,7 +153,7 @@ paths:
                   error: 
                     type: string
                     example: error
-        '500':
+        500:
           description: Internal server error  
         
   /country:
@@ -398,7 +398,7 @@ paths:
         500: 
           description: Internal Server Error
 
-  /key/:
+  /key:
     get:
       security:
         - bearerAuth: []
@@ -457,6 +457,120 @@ paths:
                     example: Invalid Token
         500: 
           description: Internal Server Error
+
+  /order/{apiId}/?plan={plan}:
+    post:
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      tags:
+        - app
+      summary: creating new orders - subscription API
+      requestBody:
+        description: pass order details
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                user: 
+                  type: string
+                  example: "user_id"
+                api:
+                  type: string
+                  example: "api_id"
+                orderId: 
+                  type: string
+                  example: 1001
+                entity: 
+                  type: string
+                amount: 
+                  type: Number,
+                  example: 100
+                amount_paid: 
+                  type: Number,
+                  example: 100
+                currency: 
+                  type: string,
+                  example: INR,
+                receipt:
+                  type: String,
+                  example: "#12021"
+                status: 
+                  type: String,
+                  example: created
+                created_at: 
+                  type: String,
+                  example: "new Date()"
+      parameters:
+        - name: apiId
+          in: path
+          required: true
+          schema: 
+            type: string
+        - name: plan
+          in: query
+          required: true
+          schema: 
+            type: string
+            enum: ["FREE", "PRO", "ULTRA", "MEGA"]
+      responses:
+        200: 
+          description: creating order
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user: 
+                    type: string
+                    example: "user_id"
+                  api:
+                    type: string
+                    example: "api_id"
+                  orderId: 
+                    type: string
+                    example: 1001
+                  entity: 
+                    type: string
+                  amount: 
+                    type: Number,
+                    example: 100
+                  amount_paid: 
+                    type: Number,
+                    example: 100
+                  currency: 
+                      type: string,
+                      example: INR,
+                  receipt:
+                      type: String,
+                      example: "#12021"
+                  status: 
+                      type: String,
+                      example: created
+                  created_at: 
+                      type: String,
+                      example:  "new Date()"
+        400:
+          description: Bad Request
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error: 
+                    type: string
+                    example: Invalid apiId Passed.
+        500:
+          description: Internal server error  
+      
+      
+          
+          
 
 
     
